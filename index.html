@@ -7,17 +7,36 @@
 </head>
 <body>
     <h2>コメントフォーム</h2>
-    <form>
+    <form id="commentForm">
         <label for="comment">コメント:</label><br>
-        <textarea id="comment" name="comment"></textarea><br><br>
+        <textarea id="comment" name="comment" required></textarea><br><br>
 
         <label for="age">年齢:</label><br>
-        <input type="number" id="age" name="age"><br><br>
-
-        <label for="file">添付ファイル:</label><br>
-        <input type="file" id="file" name="file"><br><br>
+        <input type="number" id="age" name="age" required><br><br>
 
         <button type="submit">送信</button>
     </form>
+
+    <script>
+        document.getElementById("commentForm").onsubmit = async function(e) {
+            e.preventDefault(); // フォーム送信を防止
+
+            const formData = new FormData();
+            formData.append("comment", document.getElementById("comment").value);
+            formData.append("age", document.getElementById("age").value);
+            
+            // Google Apps ScriptのURLにデータを送信
+            const response = await fetch("https://script.google.com/macros/s/AKfycbwKqtEvDgvEL9X-ac91AvgMuz-VmdtBhPCU3_2a_fgmJwGLbIoXvw6NbPx_gpn30AwZGw/exec", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (response.ok) {
+                alert("データが送信されました");
+            } else {
+                alert("送信に失敗しました");
+            }
+        };
+    </script>
 </body>
 </html>
